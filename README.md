@@ -11,7 +11,7 @@ User chooses the books they like in the list. There is a search bar in the page 
 
 ## Implementation
 
-Each book has multiple genres; For example, “Book 1” is “fiction”, “Drama”, and “Fantasy”. “Book 2” is “Music” and “Drama”. “Book 3” is “Drama” and “realism”. “Book 4” is “fiction”.
+Each book has multiple genres; For example, we have four books as followed:
 
 - Book 1: Fiction, Drama, fantasy
 
