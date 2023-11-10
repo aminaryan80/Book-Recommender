@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<div class="container">
+    <h1>Book List</h1>
+    <input type="text" id="searchInput" placeholder="Search by title..." oninput="filterBooks()">
+
+    <button onclick="sendSelectedBooks()">Send Selected Books</button>
+
+    <ul id="bookList">
+        <!-- Book items will be dynamically added here -->
+    </ul>
+</div>
+
+</body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 5px;
+    }
+
+    button {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px 0 0 0;
+        width: 100%;
+    }
+
+    .selected {
+        background-color: #b9edff;
+    }
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var books = [
+            {% for book in books %}
+                {
+                    title: "{{ book.title }}",
+                    author: "{{ book.author }}",
+                    publication_date: "{{ book.published_date|date:"Y" }}"
+                },
+            {% endfor %}
+        ];
+
+        var selectedBooks = [];
+
+        function renderBooks() {
+            var searchInput = document.getElementById("searchInput").value.toLowerCase();
+            var bookList = document.getElementById("bookList");
+
+            bookList.innerHTML = "";
+
+            books.forEach(function (book, index) {
+                if (book.title.toLowerCase().includes(searchInput)) {
+                    var li = document.createElement("li");
+                    li.textContent = `${book.title} | ${book.author} (${book.publication_date})`;
+                    li.setAttribute("data-index", index);
+                    li.onclick = toggleSelection;
+
+                    if (selectedBooks.includes(index)) {
+                        li.classList.add("selected");
+                    }
+
+                    bookList.appendChild(li);
+                }
+            });
+        }
+
+        function toggleSelection(event) {
+            var selectedLi = event.target;
+            var index = parseInt(selectedLi.getAttribute("data-index"), 10);
+
+            selectedLi.classList.toggle("selected");
+
+            if (selectedBooks.includes(index)) {
+                selectedBooks = selectedBooks.filter(bookIndex => bookIndex !== index);
+            } else {
+                selectedBooks.push(index);
+            }
+
+            console.log("Selected Books:", selectedBooks);
+        }
+
+        renderBooks();
+
+        window.filterBooks = function () {
+            renderBooks();
+        };
+
+        window.sendSelectedBooks = function () {
+            console.log("Sending selected books to API:", selectedBooks);
+
+            var form = document.createElement('form');
+            form.action = 'recommend';
+            form.method = 'POST';
+
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedBooks';
+            input.value = JSON.stringify(selectedBooks);
+
+            form.appendChild(input);
+
+            document.body.appendChild(form);
+
+            form.submit();
+        };
+    });
+
+</script>
+</html>

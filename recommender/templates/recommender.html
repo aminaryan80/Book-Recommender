@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<div class="container">
+
+    <h1>Recommended Books</h1>
+    <ul id="bookList">
+        {% for book in books %}
+            <li>{{ book.title }} | {{ book.author }} ({{ book.published_date|date:"Y" }}) - score: {{ book.score }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 5px;
+    }
+
+    button {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px 0 0 0;
+        width: 100%;
+    }
+
+</style>
+</html>
